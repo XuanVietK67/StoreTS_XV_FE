@@ -1,19 +1,23 @@
-import { Checkbox } from "@/components/ui/checkbox";
-import { useMemo } from "react";
+import { cn } from "@/lib/utils";
 
 type Props = {
+  products: any[];
   selected: string[];
   onChange: (value: string[]) => void;
-  products: {
-    product: {
-      name: string;
-      price: number;
-      toppings: string[];
-    };
-  }[];
 };
 
-export default function ToppingFilter({ selected, onChange, products }: Props) {
+export default function ToppingFilter({
+  products,
+  selected,
+  onChange,
+}: Props) {
+  // lấy topping unique
+  const toppings = Array.from(
+    new Set(
+      products.flatMap((p) => p.product.toppings)
+    )
+  );
+
   const toggle = (topping: string) => {
     if (selected.includes(topping)) {
       onChange(selected.filter((t) => t !== topping));
@@ -22,43 +26,33 @@ export default function ToppingFilter({ selected, onChange, products }: Props) {
     }
   };
 
-  const allToppings = useMemo(() => {
-    const set = new Set<string>();
-
-    products.forEach((p) => {
-      p.product.toppings?.forEach((t) => set.add(t));
-    });
-
-    return Array.from(set).sort();
-  }, [products]);
-
   return (
-    <div className="bg-white rounded-xl p-4 shadow-sm space-y-4">
-      <h3 className="font-semibold text-sm">Toppings</h3>
+    <div className="rounded-2xl bg-white p-6 shadow-sm border">
+      <h3 className="mb-4 text-lg font-semibold text-gray-800">
+        🧋 Choose Toppings
+      </h3>
 
-      <div className="grid grid-cols-2 gap-3">
-        {allToppings.map((topping) => (
-          <label
-            key={topping}
-            className="flex items-center gap-2 text-sm cursor-pointer"
-          >
-            <Checkbox
-              checked={selected.includes(topping)}
-              onCheckedChange={() => toggle(topping)}
-            />
-            {topping}
-          </label>
-        ))}
+      <div className="flex flex-wrap gap-3">
+        {toppings.map((topping) => {
+          const active = selected.includes(topping);
+
+          return (
+            <button
+              key={topping}
+              onClick={() => toggle(topping)}
+              className={cn(
+                "px-4 py-2 rounded-full text-sm font-medium transition-all",
+                "border hover:scale-105",
+                active
+                  ? "bg-green-100 text-green-700 border-green-300"
+                  : "bg-gray-50 text-gray-600 border-gray-200 hover:bg-green-50"
+              )}
+            >
+              {topping}
+            </button>
+          );
+        })}
       </div>
-
-      {selected.length > 0 && (
-        <button
-          onClick={() => onChange([])}
-          className="text-xs text-muted-foreground hover:underline"
-        >
-          Clear filter
-        </button>
-      )}
     </div>
   );
 }

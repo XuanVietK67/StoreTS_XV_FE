@@ -1,17 +1,10 @@
-import api from "@/lib/axios";
+import { DatagetProductsByStoreWrap } from "@/types/store.type";
 
 export const getProductsByStore = async (
   storeId: string,
   page = 1,
   limit = 10
-) => {
-  //   const res = await api.get(`store-product/${storeId}/products`, {
-  //     params: {
-  //       page,
-  //       limit,
-  //     },
-  //   });
-
+): Promise<DatagetProductsByStoreWrap> => {
   const res = await fetch(
     `${process.env.NEXT_PUBLIC_API_URL}store-product/${storeId}/products?page=${page}&limit=${limit}`,
     {

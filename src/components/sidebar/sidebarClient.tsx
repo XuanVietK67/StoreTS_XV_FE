@@ -102,11 +102,26 @@ export default function SidebarClient({ stores }: Props) {
                     <SidebarMenuButton
                       onClick={() => router.push(`/store/${store._id}`)}
                       className={clsx(
-                        "flex items-center gap-3 rounded-md px-3 py-2 text-sm transition",
-                        isActive ? "bg-muted font-medium" : "hover:bg-muted/60"
+                        "relative flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-all",
+                        isActive
+                          ? "bg-emerald-50 text-emerald-700 font-semibold"
+                          : "hover:bg-muted/60"
                       )}
                     >
-                      <Store className="h-4 w-4 text-muted-foreground" />
+                      {/* Accent bar */}
+                      {isActive && (
+                        <span className="absolute left-0 top-1/2 -translate-y-1/2 h-6 w-1 rounded-r bg-emerald-500" />
+                      )}
+
+                      <Store
+                        className={clsx(
+                          "h-4 w-4",
+                          isActive
+                            ? "text-emerald-600"
+                            : "text-muted-foreground"
+                        )}
+                      />
+
                       <span className="truncate">{store.name}</span>
                     </SidebarMenuButton>
                   </SidebarMenuItem>

@@ -1,10 +1,12 @@
 "use client";
 
+import ProductSortSelect, {
+  ProductSort,
+} from "@/components/store/product-sort";
 import ProductCard from "@/components/store/productCard";
-import ToppingFilter from "@/components/store/topping-filter";
 import { useMemo, useState } from "react";
 
-type Props = {
+export type Props = {
   products: {
     product: {
       name: string;
@@ -15,27 +17,21 @@ type Props = {
 };
 
 export default function ProductList({ products }: Props) {
-  const [selectedToppings, setSelectedToppings] = useState<string[]>([]);
-
-  const filteredProducts = useMemo(() => {
-    if (selectedToppings.length === 0) return products;
-    return products.filter((item) =>
-      selectedToppings.every((topping) =>
-        item.product.toppings.includes(topping)
-      )
+  const [sort, setSort] = useState<ProductSort>("az");
+  const sortedProducts = useMemo(() => {
+    return [...products].sort((a, b) =>
+      sort === "az"
+        ? a.product.name.localeCompare(b.product.name)
+        : b.product.name.localeCompare(a.product.name)
     );
-  }, [products, selectedToppings]);
+  }, [products, sort]);
   return (
-    // <div className="grid grid-cols-12 gap-6">
-    //   <div className="col-span-12 md:col-span-3">
-    //     <ToppingFilter
-    //       selected={selectedToppings}
-    //       onChange={setSelectedToppings}
-    //       products={products}
-    //     />
-    //   </div>
+    <div className="space-y-4">
+      <div className="flex items-center justify-end">
+        <ProductSortSelect value={sort} onChange={setSort} />
+      </div>
       <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
-        {products.map((item, i) => (
+        {sortedProducts.map((item, i) => (
           <ProductCard
             key={i}
             name={item.product.name}
@@ -45,6 +41,6 @@ export default function ProductList({ products }: Props) {
           />
         ))}
       </div>
-    // </div>
+    </div>
   );
 }
