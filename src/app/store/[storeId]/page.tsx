@@ -1,21 +1,35 @@
+import ProductList from "@/components/store/productList";
+import StoreHeader from "@/components/store/store-header";
+import { getProductsByStore } from "@/services/store-product.service";
+import { getStoreInformation } from "@/services/store.service";
+
 type Props = {
   params: {
     storeId: string;
   };
+  searchParams: {
+    page?: string;
+    limit?: string;
+  };
 };
 
-export default async function StoreDetailPage({ params }: Props) {
-  const { storeId } = params;
+export default async function StoreDetailPage({ params, searchParams }: Props) {
+  const { storeId } = await params;
 
-  // gọi API backend
-  // const store = await getStoreById(storeId);
+  // const page = Number(searchParams.page ?? 1);
+  // const limit = Number(searchParams.limit ?? 5);
+
+  const products = await getProductsByStore(storeId, 1, 40);
+  const store = await getStoreInformation(storeId);
+  console.log("Products:", store);
 
   return (
-    <div className="p-6">
-      <h1 className="text-2xl font-semibold">Store detail</h1>
-      <p className="text-muted-foreground mt-2">
-        Store ID: <span className="font-mono">{storeId}</span>
-      </p>
+    <div className="min-h-screen bg-[#FAF7F2] p-6 w-full">
+      <div className="w-full mx-auto space-y-8 ">
+        <StoreHeader title={`🧋 Store ${store.name} Menu`} />
+        <ProductList products={products[0].data} />
+        {/* <StorePagination ... /> */}
+      </div>
     </div>
   );
 }
