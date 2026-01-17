@@ -1,36 +1,105 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+## 🧋 Bài Test: Xây dựng Store Trà Sữa (`js-test`)
 
-## Getting Started
+### 🔗 Repository
 
-First, run the development server:
+* **Frontend:**
+  [https://github.com/XuanVietK67/StoreTS_XV_FE.git](https://github.com/XuanVietK67/StoreTS_XV_FE.git)
+* **Backend:**
+  [https://github.com/XuanVietK67/StoreTS.git](https://github.com/XuanVietK67/StoreTS.git)
+
+---
+
+### 🛠️ Công nghệ sử dụng
+
+* **Backend:** NestJS
+* **Frontend:** Next.js + Shadcn UI
+* **Database:** MongoDB
+
+---
+
+### ▶️ Hướng dẫn chạy dự án
+
+#### 1️⃣ Backend
+
+```bash
+git clone https://github.com/XuanVietK67/StoreTS.git
+cd StoreTS
+npm install
+```
+
+* Tạo file `.env`
+* Copy nội dung từ `.env.example` sang `.env`
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+#### 2️⃣ Frontend
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+git clone https://github.com/XuanVietK67/StoreTS_XV_FE.git
+cd StoreTS_XV_FE
+npm install
+```
 
-## Learn More
+* Tạo file `.env`
+* Copy nội dung từ `.env-example` sang `.env`
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+npm run dev
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+---
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### 🧪 Cách test chức năng
 
-## Deploy on Vercel
+* Dự án đã tạo sẵn **data cho store *Yi He Tang***
+* Sau khi chạy frontend:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+  * Chọn store **Yi He Tang** để xem menu sản phẩm
+  * Có thể:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+    * 🔍 Search store trong sidebar
+    * 🔄 Sắp xếp store theo thứ tự A → Z / Z → A
+
+---
+
+### ✨ Chức năng chính
+
+#### Backend
+
+* Quản lý **Store**, **Product**, **StoreProduct**
+* Quan hệ **n-n** giữa Store và Product thông qua bảng trung gian
+* API lấy danh sách product theo store kèm phân trang
+* **Tối ưu truy vấn bằng index MongoDB**:
+
+  * Index kết hợp `(storeId, productId)`
+  * Giúp:
+
+    * Truy vấn nhanh `GET /stores/:storeId/products`
+    * Ngăn dữ liệu trùng product trong cùng store
+    * Tối ưu hiệu năng khi join và filter dữ liệu lớn
+
+#### Frontend
+
+* Sidebar danh sách store
+* Trang chi tiết store hiển thị menu sản phẩm
+* Filter sản phẩm theo **topping** (xử lý hoàn toàn ở frontend)
+* Sort sản phẩm theo **bảng chữ cái**
+* Giao diện xây dựng bằng **Shadcn UI**
+
+---
+
+### 📌 Ghi chú
+
+* Bài test tập trung vào:
+
+  * Thiết kế data model
+  * Tối ưu truy vấn backend
+  * Cách tổ chức component & state ở frontend
+
+---
+
+Cảm ơn anh/chị đã dành thời gian review bài test 🙏
