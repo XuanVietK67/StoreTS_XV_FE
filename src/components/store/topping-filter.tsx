@@ -1,4 +1,5 @@
 import { cn } from "@/lib/utils";
+import clsx from "clsx";
 
 type Props = {
   products: any[];
@@ -6,16 +7,10 @@ type Props = {
   onChange: (value: string[]) => void;
 };
 
-export default function ToppingFilter({
-  products,
-  selected,
-  onChange,
-}: Props) {
+export default function ToppingFilter({ products, selected, onChange }: Props) {
   // lấy topping unique
   const toppings = Array.from(
-    new Set(
-      products.flatMap((p) => p.product.toppings)
-    )
+    new Set(products.flatMap((p) => p.product.toppings))
   );
 
   const toggle = (topping: string) => {
@@ -40,12 +35,11 @@ export default function ToppingFilter({
             <button
               key={topping}
               onClick={() => toggle(topping)}
-              className={cn(
-                "px-4 py-2 rounded-full text-sm font-medium transition-all",
-                "border hover:scale-105",
-                active
-                  ? "bg-green-100 text-green-700 border-green-300"
-                  : "bg-gray-50 text-gray-600 border-gray-200 hover:bg-green-50"
+              className={clsx(
+                "px-4 py-2 rounded-full text-sm border transition",
+                selected.includes(topping)
+                  ? "bg-emerald-100 border-emerald-400 text-emerald-700"
+                  : "bg-white hover:bg-muted"
               )}
             >
               {topping}

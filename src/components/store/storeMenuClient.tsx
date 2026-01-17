@@ -4,32 +4,48 @@ import { useMemo, useState } from "react";
 import ToppingFilter from "@/components/store/topping-filter";
 import ProductList from "@/components/store/productList";
 import { ProductInStore } from "@/types/store.type";
+import { ProductSort } from "@/components/store/product-sort";
+import { ProductToolbar } from "@/components/store/store-toolbar";
 
-
-export default function StoreMenuClient({ products }: { products: ProductInStore[] }) {
+export default function StoreMenuClient({
+  products,
+}: {
+  products: ProductInStore[];
+}) {
   const [selectedToppings, setSelectedToppings] = useState<string[]>([]);
+  const [sort, setSort] = useState<ProductSort>("az");
 
   // ✅ FILTER FRONTEND
   const filteredProducts = useMemo(() => {
-    if (selectedToppings.length === 0) return products;
+    let list = [...products];
 
-    return products.filter((product) =>
-      selectedToppings.some((t) => product.product.toppings.includes(t))
+    if (selectedToppings.length > 0) {
+      list = list.filter((product) =>
+        selectedToppings.some((t) => product.product.toppings.includes(t))
+      );
+    }
+
+    list.sort((a, b) =>
+      sort === "az"
+        ? a.product.name.localeCompare(b.product.name)
+        : b.product.name.localeCompare(a.product.name)
     );
-  }, [products, selectedToppings]);
+
+    return list;
+  }, [products, selectedToppings, sort]);
 
   return (
     <div className="flex flex-col gap-8">
-      {/* FILTER */}
       <div className="w-full">
-        <ToppingFilter
-          products={products}
-          selected={selectedToppings}
-          onChange={setSelectedToppings}
-        />
+        <ProductToolbar sort={sort} onSortChange={setSort}>
+          <ToppingFilter
+            products={products}
+            selected={selectedToppings}
+            onChange={setSelectedToppings}
+          />
+        </ProductToolbar>
       </div>
 
-      {/* PRODUCTS */}
       <div className="w-full">
         <ProductList products={filteredProducts} />
       </div>

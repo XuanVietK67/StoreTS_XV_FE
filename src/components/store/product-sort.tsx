@@ -1,12 +1,8 @@
 "use client";
 
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { ChevronDown, ArrowUpAZ, ArrowDownZA } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { ArrowDownZA, ArrowUpAZ } from "lucide-react";
 
 export type ProductSort = "az" | "za";
 
@@ -19,23 +15,29 @@ export default function ProductSortSelect({ value, onChange }: Props) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <button
+        <Button
           className="
+            h-9 rounded-full px-4 text-sm font-semibold
+            bg-emerald-500 text-white
+            hover:bg-emerald-700
             flex items-center gap-2
-            rounded-full border
-            px-4 py-2
-            text-sm font-medium
-            bg-white hover:bg-muted
-            transition
           "
         >
-          <span className="text-muted-foreground">Sort:</span>
-          <span>{value === "az" ? "A → Z" : "Z → A"}</span>
-          <ChevronDown className="h-4 w-4 text-muted-foreground" />
-        </button>
+          {value === "az" ? (
+            <>
+              <ArrowUpAZ className="h-4 w-4" />
+              A → Z
+            </>
+          ) : (
+            <>
+              <ArrowDownZA className="h-4 w-4" />
+              Z → A
+            </>
+          )}
+        </Button>
       </DropdownMenuTrigger>
 
-      <DropdownMenuContent align="end" className="min-w-[140px]">
+      <DropdownMenuContent align="end" className="rounded-xl">
         <DropdownMenuItem onClick={() => onChange("az")}>
           <ArrowUpAZ className="mr-2 h-4 w-4" />
           A → Z

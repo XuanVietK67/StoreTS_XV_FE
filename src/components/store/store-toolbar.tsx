@@ -1,31 +1,31 @@
 "use client";
 
+import { FilterButton } from "@/components/store/filterToppingsButton";
+import ProductSortSelect, {
+  ProductSort,
+} from "@/components/store/product-sort";
 import { Button } from "@/components/ui/button";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { SlidersHorizontal } from "lucide-react";
+import { useState } from "react";
 
-export default function StoreToolbar() {
+type Props = {
+  children: React.ReactNode; // topping filter
+  sort: ProductSort;
+  onSortChange: (v: ProductSort) => void;
+};
+
+export function ProductToolbar({ children, sort, onSortChange }: Props) {
+  const [open, setOpen] = useState<boolean>(false);
   return (
-    <div className="flex items-center justify-between mt-4">
-      <Button className="bg-slate-800 hover:bg-slate-700">Filter</Button>
-
-      <div className="flex items-center gap-2">
-        <span className="text-sm text-muted-foreground">Sort by</span>
-        <Select defaultValue="name">
-          <SelectTrigger className="w-[140px]">
-            <SelectValue />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="name">Name</SelectItem>
-            <SelectItem value="price">Price</SelectItem>
-          </SelectContent>
-        </Select>
+    <div className="bg-white rounded-2xl border p-5 mb-6 shadow-sm space-y-4">
+      {/* Top row */}
+      <div className="flex items-center justify-between gap-1 rounded-full border bg-muted/40 p-1">
+        <FilterButton open={open} onToggle={setOpen} />
+        <ProductSortSelect value={sort} onChange={onSortChange} />
       </div>
+
+      {/* Filters */}
+       {open && <div>{children}</div>}
     </div>
   );
 }
